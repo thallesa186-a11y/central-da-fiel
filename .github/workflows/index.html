@@ -1,0 +1,418 @@
+<<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Central da Fiel</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #080808;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        /* CABEÇALHO */
+
+        header {
+            background: #000;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid white;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        header p {
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        /* MENU */
+
+        nav {
+            background: #111;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #aaa;
+        }
+
+        /* DESTAQUE */
+
+        .destaque {
+            padding: 35px 15px;
+            text-align: center;
+            background: linear-gradient(#111, #080808);
+        }
+
+        .destaque h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .destaque p {
+            color: #aaa;
+        }
+
+        /* NOTÍCIAS */
+
+        .noticias {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px 15px;
+        }
+
+        .noticias > h2 {
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: #151515;
+            border: 1px solid #333;
+            border-radius: 14px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            border-color: white;
+            transform: translateY(-3px);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-conteudo {
+            padding: 18px;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .card p {
+            color: #aaa;
+            line-height: 1.5;
+        }
+
+        .data {
+            color: #777;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+
+        /* OUTRAS SEÇÕES */
+
+        .secao {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px 15px;
+        }
+
+        .caixa {
+            background: #151515;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        /* RODAPÉ */
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 30px;
+            border-top: 1px solid #333;
+            color: #777;
+        }
+
+        /* CELULAR */
+
+        @media (max-width: 600px) {
+
+            nav {
+                gap: 15px;
+                font-size: 14px;
+                overflow-x: auto;
+                justify-content: flex-start;
+            }
+
+            .card img {
+                height: 170px;
+            }
+
+        }
+
+    input,
+textarea {
+    width: 100%;
+    padding: 12px;
+    background: #0b0b0b;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 8px;
+}
+
+textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+button {
+    background: white;
+    color: black;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+    
+    </style>
+}
+</head>
+<script>
+
+function carregarNoticias() {
+
+    let noticias = JSON.parse(
+        localStorage.getItem("noticias") || "[]"
+    );
+
+    noticias.forEach(function(noticia) {
+
+        criarCard(
+            noticia.titulo,
+            noticia.texto,
+            noticia.data
+        );
+
+    });
+}
+
+
+function adicionarNoticia() {
+
+    let titulo = document.getElementById("titulo").value;
+    let texto = document.getElementById("texto").value;
+
+    if (titulo === "" || texto === "") {
+        alert("Preencha o título e o texto!");
+        return;
+    }
+
+    let data = new Date().toLocaleDateString("pt-BR");
+
+    let noticias = JSON.parse(
+        localStorage.getItem("noticias") || "[]"
+    );
+
+    noticias.push({
+        titulo: titulo,
+        texto: texto,
+        data: data
+    });
+
+    localStorage.setItem(
+        "noticias",
+        JSON.stringify(noticias)
+    );
+
+    criarCard(titulo, texto, data);
+
+    document.getElementById("titulo").value = "";
+    document.getElementById("texto").value = "";
+
+}
+
+
+function criarCard(titulo, texto, data) {
+
+    let noticia = document.createElement("div");
+
+    noticia.className = "card";
+
+    noticia.innerHTML = `
+        <div class="card-conteudo">
+
+            <h3>${titulo}</h3>
+
+            <p>${texto}</p>
+
+            <div class="data">
+                📅 ${data}
+            </div>
+
+        </div>
+    `;
+
+    document
+        .getElementById("noticias")
+        .appendChild(noticia);
+
+}
+
+
+carregarNoticias();
+
+</script>
+  
+  <body>
+
+    <header>
+        <h1>⚫⚪ CENTRAL DA FIEL</h1>
+        <p>As principais notícias do Corinthians</p>
+    </header>
+
+    <!-- MENU -->
+
+    <nav>
+        <a href="#inicio">Início</a>
+        <a href="#noticias">Notícias</a>
+        <a href="#jogos">Jogos</a>
+        <a href="#tabela">Tabela</a>
+        <a href="#elenco">Elenco</a>
+    </nav>
+
+    <!-- DESTAQUE -->
+
+    <section class="destaque" id="inicio">
+
+        <h2>🖤 Vai, Corinthians!</h2>
+
+        <p>
+            Tudo sobre o Timão em um só lugar.
+        </p>
+
+    </section>
+
+    <!-- NOTÍCIAS -->
+
+    <section class="noticias" id="noticias">
+
+      <div class="caixa">
+
+    <h3>➕ Adicionar notícia</h3>
+
+    <input id="titulo" type="text" placeholder="Título da notícia">
+
+    <br><br>
+
+    <textarea id="texto" placeholder="Escreva a notícia"></textarea>
+
+    <br><br>
+
+    <button onclick="adicionarNoticia()">
+        Publicar notícia
+    </button>
+
+</div>
+
+<br>
+      
+        <h2>📰 Últimas notícias</h2>
+
+        <div class="card">
+
+            <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=900&q=80">
+
+            <div class="card-conteudo">
+
+                <h3>Corinthians se prepara para o próximo jogo</h3>
+
+                <p>
+                    O Timão segue se preparando para o próximo
+                    desafio da temporada.
+                </p>
+
+                <div class="data">
+                    📅 21/09/2026
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <img src="https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=900&q=80">
+
+            <div class="card-conteudo">
+
+                <h3>Confira as novidades do elenco</h3>
+
+                <p>
+                    Veja as principais informações sobre os
+                    jogadores do Corinthians.
+                </p>
+
+                <div class="data">
+                    📅 21/09/2026
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=900&q=80">
+
+            <div class="card-conteudo">
+
+                <h3>Central da Fiel está no ar!</h3>
+
+                <p>
+                    Novo site criado para reunir as notícias
+                    e informações do Timão.
+                </p>
+
+                <div class="data">
+                    📅 21/09/2026
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- JOGOS -->
+
+    <section class="secao" id="jogos">
+
+        <html></html>
